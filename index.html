@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Natal da Família</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#b30000,#006400);
+  color:#fff;
+  text-align:center;
+}
+header{padding:30px 10px}
+.carousel{
+  max-width:360px;
+  margin:30px auto;
+  background:rgba(255,255,255,0.15);
+  border-radius:20px;
+  padding:20px;
+}
+.family-btn{
+  background:gold;
+  color:darkred;
+  border:none;
+  padding:15px 30px;
+  border-radius:40px;
+  font-size:1.1em;
+  font-weight:bold;
+  cursor:pointer;
+}
+footer{margin:40px 0}
+@keyframes fall{to{transform:translateY(110vh)}}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🎄 Feliz Natal 🎄</h1>
+  <p>Um site especial para a nossa família ❤️</p>
+</header>
+
+<div class="carousel">
+<h2>Pai 🎅</h2>
+<p>Pai, só queria te dizer o quanto você é importante pra mim. Obrigado por tudo o que você faz, pelos conselhos, pelas broncas (mesmo quando eu não gosto 😅) e por estar sempre do meu lado. Você é meu exemplo e meu apoio. Te amo demais! 💙</p>
+</div>
+
+<div class="carousel">
+<h2>Mãe 🎄</h2>
+<p>Mãe, só queria te agradecer por tudo. Pelo cuidado, pelo carinho, pela paciência (que eu sei que não é pouca 😅) e por nunca desistir de mim. Você é meu porto seguro e minha maior força. Te amo muito! 💕</p>
+</div>
+
+<div class="carousel">
+<h2>Manu 🎅</h2>
+<p>Manu, mesmo não morando com a gente, você continua sendo muito importante pra mim. Sempre que a gente se fala ou se encontra é bom demais. Te amo! 💙</p>
+</div>
+
+<div class="carousel">
+<h2>Brenna 🎁</h2>
+<p>Brenna, você é uma pessoa muito especial pra mim. Sempre traz alegria, risadas e deixa tudo mais leve quando está por perto. Obrigado por ser do jeitinho que você é. Gosto muito de você! 💖</p>
+</div>
+
+<div class="carousel">
+<h2>Maria 🎄</h2>
+<p>Maria, a gente briga bastante, discute por qualquer coisa e quase nunca concorda em tudo 😅, mas no fim das contas você é minha irmã e isso não muda. A casa não seria a mesma sem você e nossas tretas diárias. Gosto de você.</p>
+</div>
+
+<div class="carousel">
+<h2>Dalto ⭐</h2>
+<p>Dalto, você já deixou de ser só cunhado faz tempo. Pra mim é tipo um irmão mais velho, sempre presente, parceiro e firmeza. Obrigado pelas resenhas e pela parceria. Tamo junto! 👊</p>
+</div>
+
+<div class="carousel">
+<h2>Geraldo ❄️</h2>
+<p>Geraldo, você começou como cunhado e virou parceiro de zoeira e de videogame. Sempre tem resenha, risada e partida pra jogar fora. Já é amigo mesmo. Tamo junto! 🎮👊</p>
+</div>
+
+<footer>
+<p>Com amor, da nossa família ✨</p>
+
+<button id="snowBtn" class="family-btn">❄️ Ativar neve</button>
+
+<div style="margin-top:20px">
+<input id="nameInput" placeholder="Seu nome" style="padding:10px;border-radius:10px;border:none;width:70%;max-width:220px">
+<br><br>
+<button id="likeBtn" class="family-btn">❤️ Curtir</button>
+<p id="likeCount">0 curtidas</p>
+<div id="likeList"></div>
+</div>
+</footer>
+
+<!-- Música -->
+<audio id="musicaNatal" loop>
+<source src="https://cdn.pixabay.com/audio/2022/10/30/audio_6c1d2f8c7c.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicBtn" style="position:fixed;bottom:20px;right:20px;background:gold;color:darkred;border:none;padding:12px 18px;border-radius:30px;font-weight:bold;cursor:pointer">
+🔊 Tocar música
+</button>
+
+<script>
+// Música
+const musica=document.getElementById("musicaNatal");
+const musicBtn=document.getElementById("musicBtn");
+let tocando=false;
+musicBtn.onclick=()=>{
+  if(!tocando){musica.play();musicBtn.textContent="🔇 Pausar música";}
+  else{musica.pause();musicBtn.textContent="🔊 Tocar música";}
+  tocando=!tocando;
+};
+
+// Neve
+let snowing=false;
+let snowElements=[];
+function startSnow(){
+  for(let i=0;i<40;i++){
+    const s=document.createElement("div");
+    s.innerHTML="❄";
+    s.style.position="fixed";
+    s.style.left=Math.random()*100+"vw";
+    s.style.top="-20px";
+    s.style.fontSize=Math.random()*20+10+"px";
+    s.style.opacity=Math.random();
+    s.style.animation=`fall ${Math.random()*5+5}s linear infinite`;
+    document.body.appendChild(s);
+    snowElements.push(s);
+  }
+}
+function stopSnow(){
+  snowElements.forEach(e=>e.remove());
+  snowElements=[];
+}
+document.getElementById("snowBtn").onclick=()=>{
+  snowing=!snowing;
+  if(snowing){startSnow();snowBtn.textContent="☀️ Parar neve";}
+  else{stopSnow();snowBtn.textContent="❄️ Ativar neve";}
+};
+
+// Curtidas
+let likes=localStorage.getItem("likesNatal")||0;
+let names=JSON.parse(localStorage.getItem("likeNames")||"[]");
+const likeCount=document.getElementById("likeCount");
+const likeList=document.getElementById("likeList");
+
+function render(){
+  likeCount.textContent=likes+" curtidas";
+  likeList.textContent=names.length?"Curtido por: "+names.join(", "):"";
+}
+render();
+
+document.getElementById("likeBtn").onclick=()=>{
+  const name=document.getElementById("nameInput").value||"Alguém da família";
+  likes++;
+  names.push(name);
+  localStorage.setItem("likesNatal",likes);
+  localStorage.setItem("likeNames",JSON.stringify(names));
+  render();
+};
+</script>
+
+</body>
+</html>
